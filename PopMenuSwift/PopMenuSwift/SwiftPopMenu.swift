@@ -7,6 +7,8 @@
 //
 import UIKit
 
+typealias didSelectMenuBlock = (IndexPath,PopoverData) -> Void
+
 class SwiftPopMenu: UIView {
     let ScreenW: CGFloat = UIScreen.main.bounds.size.width
     let ScreenH: CGFloat = UIScreen.main.bounds.size.height
@@ -14,51 +16,30 @@ class SwiftPopMenu: UIView {
     private var arrowView: UIView! = nil
     private var arrowViewWidth: CGFloat = 15
     private var arrowViewHeight: CGFloat = 8
-    var arrowOrientation: UIInterfaceOrientation = .portraitUpsideDown
     var arrowViewCenter: CGFloat = 0
     var cornorRadius: CGFloat = 5
     var popTextColor: UIColor = UIColor(red: 107 / 255.0, green: 107 / 255.0, blue: 107 / 255.0, alpha: 1.0)
     var popMenuBgColor: UIColor = UIColor.white
     var tableView: UITableView! = nil
-    var popData: [PopoverData] = [] {
-        didSet{
-            rowHeightValue = (self.myFrame.height - arrowViewHeight)/CGFloat(popData.count)
-            initViews()
-        }
-    }
-    
-    var didSelectMenuBlock:((_ indexPaths: IndexPath, _ selectedData: PopoverData)->Void)?
+    var orientation: UIInterfaceOrientation = .portraitUpsideDown
+    var popMenuWidth: CGFloat = UIScreen.main.bounds.size.width / 3
+    var popMenuHeight: CGFloat = UIScreen.main.bounds.size.height / 3
+    var topOrBottomOriginX: CGFloat = UIScreen.main.bounds.size.width / 2 - UIScreen.main.bounds.size.width / 6
+    var leftOrRightOriginY: CGFloat = UIScreen.main.bounds.size.height / 2 - UIScreen.main.bounds.size.height / 6
+    var popMenuMarginBtn: CGFloat = 0
+    var popData: [PopoverData] = []
+    var didSelectMenuBlock: didSelectMenuBlock?
     static let cellID: String = "SwiftPopMenuCellID"
     var rowHeightValue: CGFloat = 44
     var isShow: Bool = false
+    var btnRect: CGRect = .zero
     
-    init(popMenuBtn: UIView, orientation: UIInterfaceOrientation = .portraitUpsideDown,popMenuWidth: CGFloat = UIScreen.main.bounds.size.width / 3, popMenuHeight: CGFloat = UIScreen.main.bounds.size.height / 3, topOrBottomOriginX: CGFloat = UIScreen.main.bounds.size.width / 2 - UIScreen.main.bounds.size.width / 6,
-         leftOrRightOriginY: CGFloat = UIScreen.main.bounds.size.height / 2 - UIScreen.main.bounds.size.height / 6, popMenuMarginBtn: CGFloat = 0) {
-        var frame: CGRect = .zero
-        switch orientation {
-        case .portraitUpsideDown:
-            frame = CGRect(x: topOrBottomOriginX, y: popMenuBtn.frame.origin.y - popMenuHeight - popMenuMarginBtn, width: popMenuWidth, height: popMenuHeight)
-            arrowViewCenter = popMenuBtn.frame.origin.x + popMenuBtn.frame.width / 2
-            break;
-        case .portrait:
-            frame = CGRect(x: topOrBottomOriginX, y: popMenuBtn.frame.origin.y + popMenuBtn.frame.height + popMenuMarginBtn, width: popMenuWidth, height: popMenuHeight)
-            arrowViewCenter = popMenuBtn.frame.origin.x + popMenuBtn.frame.width / 2
-            break;
-        case .landscapeLeft:
-            frame = CGRect(x:popMenuBtn.frame.origin.x - popMenuWidth - popMenuMarginBtn , y: leftOrRightOriginY, width: popMenuWidth, height: popMenuHeight)
-            arrowViewCenter = popMenuBtn.frame.origin.y + popMenuBtn.frame.height / 2
-            break;
-        case .landscapeRight:
-            frame = CGRect(x:popMenuBtn.frame.origin.x + popMenuBtn.frame.width + popMenuMarginBtn , y: leftOrRightOriginY, width: popMenuWidth, height: popMenuHeight)
-            arrowViewCenter = popMenuBtn.frame.origin.y + popMenuBtn.frame.height / 2
-            break;
-        default:
-            break
-        }
-        super.init(frame: frame)
+    init(popMenuBtn: UIView, datas: [PopoverData], block: @escaping didSelectMenuBlock) {
+        super.init(frame: .zero)
         self.frame = CGRect(x: 0, y: 0, width: ScreenW, height: ScreenH)
-        arrowOrientation = orientation
-        myFrame = frame
+        btnRect = popMenuBtn.frame
+        didSelectMenuBlock = block
+        popData = datas
     }
     
     required init?(coder aDecoder: NSCoder) {
@@ -70,6 +51,7 @@ class SwiftPopMenu: UIView {
     }
     
     func show() {
+        initViews()
         UIApplication.shared.keyWindow?.addSubview(self)
         self.isShow = true
     }
@@ -80,25 +62,63 @@ class SwiftPopMenu: UIView {
     }
     
     func initViews() {
-        self.backgroundColor = UIColor.black.withAlphaComponent(0.1)
+        var frame: CGRect = .zero
         var tableViewFrame: CGRect = .zero
-        switch arrowOrientation {
+        arrowView = UIView()
+        let layer = CAShapeLayer()
+        let path = UIBezierPath()
+        
+        switch orientation {
         case .portraitUpsideDown:
+            frame = CGRect(x: topOrBottomOriginX, y: btnRect.origin.y - popMenuHeight - popMenuMarginBtn, width: popMenuWidth, height: popMenuHeight)
+            arrowViewCenter = btnRect.origin.x + btnRect.width / 2
+            myFrame = frame
             tableViewFrame = CGRect(x: myFrame.origin.x,y: myFrame.origin.y,width: myFrame.width,height: myFrame.height - arrowViewHeight)
+            tableView = UITableView(frame: tableViewFrame, style: .plain)
+            arrowView.frame = CGRect(x: myFrame.origin.x, y: myFrame.origin.y + tableView.bounds.height, width: myFrame.width, height: arrowViewHeight)
+            path.move(to: CGPoint(x: arrowViewCenter - arrowView.frame.origin.x, y: arrowViewHeight))
+            path.addLine(to: CGPoint(x: arrowViewCenter - arrowView.frame.origin.x - arrowViewWidth / 2, y: 0))
+            path.addLine(to: CGPoint(x: arrowViewCenter - arrowView.frame.origin.x + arrowViewWidth / 2, y: 0))
             break;
         case .portrait:
+            frame = CGRect(x: topOrBottomOriginX, y: btnRect.origin.y + btnRect.height + popMenuMarginBtn, width: popMenuWidth, height: popMenuHeight)
+            arrowViewCenter = btnRect.origin.x + btnRect.width / 2
+            myFrame = frame
             tableViewFrame = CGRect(x: myFrame.origin.x,y: myFrame.origin.y + arrowViewHeight, width: myFrame.width,height: myFrame.height - arrowViewHeight)
+            tableView = UITableView(frame: tableViewFrame, style: .plain)
+            arrowView.frame = CGRect(x: myFrame.origin.x, y: myFrame.origin.y, width: myFrame.width, height: arrowViewHeight)
+            path.move(to: CGPoint(x: arrowViewCenter - arrowView.frame.origin.x, y: 0))
+            path.addLine(to: CGPoint(x: arrowViewCenter - arrowView.frame.origin.x - arrowViewWidth / 2, y: arrowViewHeight))
+            path.addLine(to: CGPoint(x: arrowViewCenter - arrowView.frame.origin.x + arrowViewWidth / 2, y: arrowViewHeight))
             break;
         case .landscapeLeft:
+            frame = CGRect(x:btnRect.origin.x - popMenuWidth - popMenuMarginBtn , y: leftOrRightOriginY, width: popMenuWidth, height: popMenuHeight)
+            arrowViewCenter = btnRect.origin.y + btnRect.height / 2
+            myFrame = frame
+            tableView = UITableView(frame: tableViewFrame, style: .plain)
             tableViewFrame = CGRect(x: myFrame.origin.x,y: myFrame.origin.y, width: myFrame.width - arrowViewHeight,height: myFrame.height)
+            arrowView.frame = CGRect(x: myFrame.origin.x + tableViewFrame.width, y: myFrame.origin.y, width: arrowViewWidth, height: arrowViewHeight)
+            path.move(to: CGPoint(x: arrowViewHeight, y: arrowViewCenter - arrowView.frame.origin.y))
+            path.addLine(to: CGPoint(x: 0, y: arrowViewCenter - arrowView.frame.origin.y - arrowViewWidth / 2))
+            path.addLine(to: CGPoint(x: 0, y: arrowViewCenter - arrowView.frame.origin.y + arrowViewWidth / 2))
             break;
         case .landscapeRight:
+            frame = CGRect(x:btnRect.origin.x + btnRect.width + popMenuMarginBtn , y: leftOrRightOriginY, width: popMenuWidth, height: popMenuHeight)
+            arrowViewCenter = btnRect.origin.y + btnRect.height / 2
+            myFrame = frame
             tableViewFrame = CGRect(x: myFrame.origin.x + arrowViewHeight,y: myFrame.origin.y, width: myFrame.width - arrowViewHeight,height: myFrame.height)
+            tableView = UITableView(frame: tableViewFrame, style: .plain)
+            arrowView.frame = CGRect(x: myFrame.origin.x, y: myFrame.origin.y, width: arrowViewWidth, height: arrowViewHeight)
+            path.move(to: CGPoint(x: 0, y: arrowViewCenter - arrowView.frame.origin.y))
+            path.addLine(to: CGPoint(x: arrowViewHeight, y: arrowViewCenter - arrowView.frame.origin.y - arrowViewWidth / 2))
+            path.addLine(to: CGPoint(x: arrowViewHeight, y: arrowViewCenter - arrowView.frame.origin.y + arrowViewWidth / 2))
             break;
         default:
-            break;
+            break
         }
-        tableView = UITableView(frame: tableViewFrame, style: .plain)
+        
+        rowHeightValue = (self.myFrame.height - arrowViewHeight)/CGFloat(popData.count)
+        self.backgroundColor = UIColor.black.withAlphaComponent(0.1)
         tableView.register(SwiftPopMenuCell.classForCoder(), forCellReuseIdentifier: SwiftPopMenu.cellID)
         tableView.backgroundColor = popMenuBgColor
         tableView.layer.cornerRadius = cornorRadius
@@ -111,38 +131,6 @@ class SwiftPopMenu: UIView {
             self.addSubview(self.tableView)
         }
         
-        arrowView = UIView()
-        let layer = CAShapeLayer()
-        let path = UIBezierPath()
-        
-        switch arrowOrientation {
-        case .portraitUpsideDown:
-            arrowView.frame = CGRect(x: myFrame.origin.x, y: myFrame.origin.y + tableView.bounds.height, width: myFrame.width, height: arrowViewHeight)
-            path.move(to: CGPoint(x: arrowViewCenter - arrowView.frame.origin.x, y: arrowViewHeight))
-            path.addLine(to: CGPoint(x: arrowViewCenter - arrowView.frame.origin.x - arrowViewWidth / 2, y: 0))
-            path.addLine(to: CGPoint(x: arrowViewCenter - arrowView.frame.origin.x + arrowViewWidth / 2, y: 0))
-            break;
-        case .portrait:
-            arrowView.frame = CGRect(x: myFrame.origin.x, y: myFrame.origin.y, width: myFrame.width, height: arrowViewHeight)
-            path.move(to: CGPoint(x: arrowViewCenter - arrowView.frame.origin.x, y: 0))
-            path.addLine(to: CGPoint(x: arrowViewCenter - arrowView.frame.origin.x - arrowViewWidth / 2, y: arrowViewHeight))
-            path.addLine(to: CGPoint(x: arrowViewCenter - arrowView.frame.origin.x + arrowViewWidth / 2, y: arrowViewHeight))
-            break;
-        case .landscapeLeft:
-            arrowView.frame = CGRect(x: myFrame.origin.x + tableViewFrame.width, y: myFrame.origin.y, width: arrowViewWidth, height: arrowViewHeight)
-            path.move(to: CGPoint(x: arrowViewHeight, y: arrowViewCenter - arrowView.frame.origin.y))
-            path.addLine(to: CGPoint(x: 0, y: arrowViewCenter - arrowView.frame.origin.y - arrowViewWidth / 2))
-            path.addLine(to: CGPoint(x: 0, y: arrowViewCenter - arrowView.frame.origin.y + arrowViewWidth / 2))
-            break;
-        case .landscapeRight:
-            arrowView.frame = CGRect(x: myFrame.origin.x, y: myFrame.origin.y, width: arrowViewWidth, height: arrowViewHeight)
-            path.move(to: CGPoint(x: 0, y: arrowViewCenter - arrowView.frame.origin.y))
-            path.addLine(to: CGPoint(x: arrowViewHeight, y: arrowViewCenter - arrowView.frame.origin.y - arrowViewWidth / 2))
-            path.addLine(to: CGPoint(x: arrowViewHeight, y: arrowViewCenter - arrowView.frame.origin.y + arrowViewWidth / 2))
-            break;
-        default:
-            break;
-        }
         layer.path = path.cgPath
         layer.fillColor = popMenuBgColor.cgColor
         arrowView.layer.addSublayer(layer)

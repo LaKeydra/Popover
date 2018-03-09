@@ -33,17 +33,20 @@ class ViewController: UIViewController {
     }
     
     func showMenu() {
-        popMenu = SwiftPopMenu(popMenuBtn: popMenuBtn, popMenuWidth: 300, popMenuHeight: 200, topOrBottomOriginX: UIScreen.main.bounds.size.width - 10 - 300)
-        popMenu.popData = [
+        let data = [
             PopoverData(title: "扫一扫", content: ""),
             PopoverData(title: "签到规则", content: ""),
             PopoverData(title: "扫一扫", content: ""),
             PopoverData(title: "签到规则", content: "")
         ]
         
-        popMenu.didSelectMenuBlock = { [weak self] indexPath,data in
+        let block: didSelectMenuBlock = { [weak self] indexPath,data in
             print("block selected section = \(indexPath.section) row = \(indexPath.row) data = \(data)")
         }
+        
+        popMenu = SwiftPopMenu(popMenuBtn: popMenuBtn, datas: data, block: block)
+        popMenu.popMenuWidth = 300
+        popMenu.topOrBottomOriginX = UIScreen.main.bounds.size.width - 10 - 300
         popMenu.show()
     }
     
