@@ -33,7 +33,7 @@ class ViewController: UIViewController {
     }
     
     func showMenu() {
-        let data = [
+        let data: [PopoverDataProtocol] = [
             PopoverData(title: "扫一扫", content: ""),
             PopoverData(title: "签到规则", content: ""),
             PopoverData(title: "扫一扫", content: ""),
@@ -59,3 +59,5 @@ class ViewController: UIViewController {
     }
     
 }
+
+

@@ -7,7 +7,7 @@
 //
 import UIKit
 
-typealias didSelectMenuBlock = (IndexPath,PopoverData) -> Void
+typealias didSelectMenuBlock = (IndexPath,PopoverDataProtocol) -> Void
 
 class SwiftPopMenu: UIView {
     let ScreenW: CGFloat = UIScreen.main.bounds.size.width
@@ -27,14 +27,14 @@ class SwiftPopMenu: UIView {
     var topOrBottomOriginX: CGFloat = UIScreen.main.bounds.size.width / 2 - UIScreen.main.bounds.size.width / 6
     var leftOrRightOriginY: CGFloat = UIScreen.main.bounds.size.height / 2 - UIScreen.main.bounds.size.height / 6
     var popMenuMarginBtn: CGFloat = 0
-    var popData: [PopoverData] = []
+    var popData: [PopoverDataProtocol] = []
     var didSelectMenuBlock: didSelectMenuBlock?
     static let cellID: String = "SwiftPopMenuCellID"
     var rowHeightValue: CGFloat = 44
     var isShow: Bool = false
     var btnRect: CGRect = .zero
     
-    init(popMenuBtn: UIView, datas: [PopoverData], block: @escaping didSelectMenuBlock) {
+    init(popMenuBtn: UIView, datas: [PopoverDataProtocol], block: @escaping didSelectMenuBlock) {
         super.init(frame: .zero)
         self.frame = CGRect(x: 0, y: 0, width: ScreenW, height: ScreenH)
         btnRect = popMenuBtn.frame

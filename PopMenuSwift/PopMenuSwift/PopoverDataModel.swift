@@ -8,7 +8,12 @@
 
 import Foundation
 
-struct PopoverData {
+struct PopoverData: PopoverDataProtocol {
     var title: String
     var content: String
+}
+
+protocol PopoverDataProtocol {
+    var title: String { get set }
+    var content: String { get set }
 }
