@@ -8,16 +8,17 @@
 
 /* Begin PBXBuildFile section */
 		A8C2FAD82052572000981895 /* PopoverDataModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A8C2FAD72052572000981895 /* PopoverDataModel.swift */; };
+		A8C823F0205641D40059023B /* PopOverView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A8C823EF205641D40059023B /* PopOverView.swift */; };
 		A8D779F0204E5A1300C4F694 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = A8D779EF204E5A1300C4F694 /* AppDelegate.swift */; };
 		A8D779F2204E5A1300C4F694 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A8D779F1204E5A1300C4F694 /* ViewController.swift */; };
 		A8D779F5204E5A1300C4F694 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A8D779F3204E5A1300C4F694 /* Main.storyboard */; };
 		A8D779F7204E5A1300C4F694 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = A8D779F6204E5A1300C4F694 /* Assets.xcassets */; };
 		A8D779FA204E5A1300C4F694 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A8D779F8204E5A1300C4F694 /* LaunchScreen.storyboard */; };
-		A8D77A04204E5B3200C4F694 /* SwiftPopMenu.swift in Sources */ = {isa = PBXBuildFile; fileRef = A8D77A03204E5B3200C4F694 /* SwiftPopMenu.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
 		A8C2FAD72052572000981895 /* PopoverDataModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PopoverDataModel.swift; sourceTree = "<group>"; };
+		A8C823EF205641D40059023B /* PopOverView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PopOverView.swift; sourceTree = "<group>"; };
 		A8D779EC204E5A1300C4F694 /* PopMenuSwift.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = PopMenuSwift.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		A8D779EF204E5A1300C4F694 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		A8D779F1204E5A1300C4F694 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -25,7 +26,6 @@
 		A8D779F6204E5A1300C4F694 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		A8D779F9204E5A1300C4F694 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		A8D779FB204E5A1300C4F694 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		A8D77A03204E5B3200C4F694 /* SwiftPopMenu.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwiftPopMenu.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -64,7 +64,7 @@
 				A8D779F6204E5A1300C4F694 /* Assets.xcassets */,
 				A8D779F8204E5A1300C4F694 /* LaunchScreen.storyboard */,
 				A8D779FB204E5A1300C4F694 /* Info.plist */,
-				A8D77A03204E5B3200C4F694 /* SwiftPopMenu.swift */,
+				A8C823EF205641D40059023B /* PopOverView.swift */,
 				A8C2FAD72052572000981895 /* PopoverDataModel.swift */,
 			);
 			path = PopMenuSwift;
@@ -143,8 +143,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				A8D779F2204E5A1300C4F694 /* ViewController.swift in Sources */,
-				A8D77A04204E5B3200C4F694 /* SwiftPopMenu.swift in Sources */,
 				A8D779F0204E5A1300C4F694 /* AppDelegate.swift in Sources */,
+				A8C823F0205641D40059023B /* PopOverView.swift in Sources */,
 				A8C2FAD82052572000981895 /* PopoverDataModel.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

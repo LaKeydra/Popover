@@ -1,9 +1,9 @@
 //
-//  PopoverDataModel.swift
-//  PopMenuSwift
+//  PopOverDataModel.swift
+//  demio
 //
-//  Created by fenrir-32 on 2018/3/9.
-//  Copyright © 2018年 fenrir-32. All rights reserved.
+//  Created by fenrir-32 on 2018/3/12.
+//  Copyright © 2018年 Dalian Fenrir. All rights reserved.
 //
 
 import Foundation
@@ -21,7 +21,6 @@ class PopoverDataClass: PopoverDataProtocol {
         self.title = title
         self.content = content
     }
-    
 }
 
 protocol PopoverDataProtocol {

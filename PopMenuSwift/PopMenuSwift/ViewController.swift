@@ -10,7 +10,7 @@ import UIKit
 
 class ViewController: UIViewController {
     
-    var popMenu: SwiftPopMenu!
+    var popMenu: PopOverView!
     
     @IBOutlet weak var popMenuBtn: UIButton!
     
@@ -36,17 +36,15 @@ class ViewController: UIViewController {
         let data: [PopoverDataProtocol] = [
             PopoverData(title: "扫一扫", content: ""),
             PopoverDataClass(title: "签到规则", content: ""),
-            PopoverData(title: "签到规则", content: ""),
             PopoverDataClass(title: "扫一扫", content: ""),
-            PopoverData(title: "扫一扫", content: ""),
             PopoverData(title: "签到规则", content: "")
         ]
         
-        let block: didSelectMenuBlock = { [weak self] indexPath,data in
+        let block: DidSelectedBlock = { [weak self] indexPath,data in
             print("block selected section = \(indexPath.section) row = \(indexPath.row) title = \(data.title) content = \(data.content)")
         }
         
-        popMenu = SwiftPopMenu(popMenuBtn: popMenuBtn, datas: data, block: block)
+        popMenu = PopOverView(popMenuBtn: popMenuBtn, datas: data, block: block)
         popMenu.popMenuWidth = 300
         popMenu.topOrBottomOriginX = UIScreen.main.bounds.size.width - 10 - 300
         popMenu.show()
