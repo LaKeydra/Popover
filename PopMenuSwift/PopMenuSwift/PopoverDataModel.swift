@@ -13,6 +13,17 @@ struct PopoverData: PopoverDataProtocol {
     var content: String
 }
 
+class PopoverDataClass: PopoverDataProtocol {
+    var title: String
+    var content: String
+    
+    init(title: String, content: String) {
+        self.title = title
+        self.content = content
+    }
+    
+}
+
 protocol PopoverDataProtocol {
     var title: String { get set }
     var content: String { get set }

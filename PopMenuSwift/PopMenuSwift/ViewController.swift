@@ -35,13 +35,15 @@ class ViewController: UIViewController {
     func showMenu() {
         let data: [PopoverDataProtocol] = [
             PopoverData(title: "扫一扫", content: ""),
+            PopoverDataClass(title: "签到规则", content: ""),
             PopoverData(title: "签到规则", content: ""),
+            PopoverDataClass(title: "扫一扫", content: ""),
             PopoverData(title: "扫一扫", content: ""),
             PopoverData(title: "签到规则", content: "")
         ]
         
         let block: didSelectMenuBlock = { [weak self] indexPath,data in
-            print("block selected section = \(indexPath.section) row = \(indexPath.row) data = \(data)")
+            print("block selected section = \(indexPath.section) row = \(indexPath.row) title = \(data.title) content = \(data.content)")
         }
         
         popMenu = SwiftPopMenu(popMenuBtn: popMenuBtn, datas: data, block: block)
